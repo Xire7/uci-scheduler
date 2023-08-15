@@ -1,35 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import { useState } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import CreatorDetail, { loadCreator } from "./routes/CourseDetails.jsx";
+import AddCreator from "./routes/AddCourse";
+import RootLayout from "./components/RootLayout";
+import HomePage, { loadCreators } from "./routes/HomePage";
+import EditCreator from "./routes/EditCourse";
+import { manipulateCreatorAction } from "./components/CourseForm";
 
 function App() {
-  const [count, setCount] = useState(0)
+  let ids = [];  // this isn't done yet, finish this after denny's. whole point is making sure IDs never duplicate
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  const updateIDHandler = (updatedIDList) => {
+    ids = updatedIDList; // this isn't done yet, finish this after denny's. whole point is making sure IDs never duplicate
+    console.log(ids);
+  }
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <RootLayout />,
+      children: [
+        {
+          index: true,
+          element: <HomePage update={updateIDHandler}/>,  // this isn't done yet, finish this after denny's. whole point is making sure IDs never duplicate
+          loader: loadCreators,
+        },
+        {
+          path: ":creatorId",
+          loader: loadCreator,
+          id: "fetchCreator",
+          children: [
+            {
+              index: true,
+              element: <CreatorDetail />,
+              action: manipulateCreatorAction,
+            },
+            {
+              path: "edit",
+              element: <EditCreator />,
+              action: manipulateCreatorAction,
+            },
+          ],
+        },
+        {
+          path: "new",
+          element: <AddCreator idCheck={ids}/>,  // this isn't done yet, finish this after denny's. whole point is making sure IDs never duplicate
+          action: manipulateCreatorAction,
+        },
+      ],
+    },
+  ]);
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;

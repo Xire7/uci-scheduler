@@ -1,0 +1,36 @@
+.card {
+    display: flex;
+    width: 18rem;
+    height: 14rem;
+    flex-direction: column;
+    background-color: rgba(238, 230, 230, 0.452);
+    border-radius: 2rem;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.2);
+    transition: 0.3s;
+    text-align: center;
+    align-items: center;
+}
+
+.card img {
+    border-radius: 8px;
+    padding: 5px;
+    max-width: 100%;
+    height: 50%;
+    object-fit: fill;
+}
+
+.card:hover {
+    box-shadow: 0 1rem 2rem rgba(0,0,0,0.3);
+}
+
+.card p {
+    font-family: 'Black Han Sans', sans-serif;
+    color: rgb(59, 58, 58);
+    font-size: 0.5rem;
+    padding: 0.5px;
+    margin: 3px;
+}
+
+.desc {
+    font-family: 'Fira Sans', sans-serif;
+}

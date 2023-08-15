@@ -77,6 +77,7 @@ const coursesToPineCone = async () => {
   for (let i = 0; i < 3; ++i) {
     if (i % 3 == 0 && i != 0) {
       console.log("Making sure abides by OpenAI 3000 RPM limit");
+      sleep()
     }
     try {
       let courseDict = {};
@@ -103,7 +104,7 @@ const coursesToPineCone = async () => {
     }
   }
   console.log(courseList);
-  console.log(courseList.vectors[0].values.embedding, "POOP");
+  console.log(courseList.vectors[0].values.embedding, "POOP"); // this is the MF embed
   console.log(courseList.vectors[1]);
   console.log(courseList.vectors[2]);
   return JSON.stringify(courseList);

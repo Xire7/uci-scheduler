@@ -5,6 +5,7 @@
 // npm i morgan <-- request logger
 
 const {main} = require('./apis/main');
+const {upsert} = require('./apis/pineconeupsert');
 
 const express = require("express");
 

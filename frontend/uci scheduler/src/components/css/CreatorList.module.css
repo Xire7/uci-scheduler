@@ -1,0 +1,10 @@
+ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+p {
+    font-size: 2rem;
+}
