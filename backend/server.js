@@ -4,9 +4,11 @@
 // npm install nodemon <-- auto restarts server when backend code is updated
 // npm i morgan <-- request logger
 
-require("dotenv").config();
-const morgan = require("morgan");
+const {main} = require('./apis/main');
+
 const express = require("express");
+
+require("dotenv").config();
 const db = require("./db"); // will look for index.js
 
 const app = express();
@@ -18,6 +20,7 @@ app.use(express.json()); // takes the request body and puts it under the "body" 
 // get all restauraunts
 app.get("/api/v1/courses", async (request, response) => {
   try {
+    main();
     const result = await db.query("select * from courses");
     console.log(result);
     response.status(200).json({
@@ -124,3 +127,4 @@ app.listen(port, () => {
     `Server exists, listening on: NO MATTER WHAT YOU SAY OR WHAT YOU DO WHEN IM ALONE ID RATHER BE WITH YOU. EFF THESE OTHER N WORDS ILL BE RIGHT BY YOURSIDE TILL ${port}.`
   );
 });
+
