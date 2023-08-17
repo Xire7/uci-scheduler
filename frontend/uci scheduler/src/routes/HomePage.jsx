@@ -2,7 +2,7 @@
 import { useLoaderData } from "react-router-dom";
 import { useEffect } from "react";
 import { supabase } from "../client";
-import CreatorList from "../components/CourseList";
+import CourseList from "../components/CourseList";
 
 const HomePage = ({ update }) => {
   const data = useLoaderData();
@@ -17,7 +17,7 @@ const HomePage = ({ update }) => {
   return (
     <>
       <h1>The Creatorverse</h1>
-      <CreatorList creatorList={data} />
+      <CourseList CourseList={data} />
     </>
   );
 };
