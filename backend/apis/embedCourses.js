@@ -81,4 +81,5 @@ const embedCourses = async () => {
 
 module.exports = {
   embedCourses, 
+  createEmbeddings
 };

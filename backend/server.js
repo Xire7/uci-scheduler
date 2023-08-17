@@ -5,6 +5,7 @@
 // npm i morgan <-- request logger
 
 const {embedCourses} = require("./apis/embedCourses");
+const {queryDB} = require("./apis/query");
 
 const express = require("express");
 
@@ -19,6 +20,7 @@ app.use(express.json()); // takes the request body and puts it under the "body" 
 
 app.get("/api/v1/courses", async (request, response) => {
   try {
+    queryDB("quantum physics");
     const result = await db.query("select * from courses");
     console.log(result);
     response.status(200).json({
