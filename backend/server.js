@@ -4,8 +4,7 @@
 // npm install nodemon <-- auto restarts server when backend code is updated
 // npm i morgan <-- request logger
 
-const {main} = require('./apis/main');
-const {upsert} = require('./apis/pineconeupsert');
+const {embedCourses} = require("./apis/embedCourses");
 
 const express = require("express");
 
@@ -18,10 +17,8 @@ app.use(express.json()); // takes the request body and puts it under the "body" 
 
 // http://localhost:3005/getCourses <--- if it gets this URL, directs it to this route and actions
 
-// get all restauraunts
 app.get("/api/v1/courses", async (request, response) => {
   try {
-    main();
     const result = await db.query("select * from courses");
     console.log(result);
     response.status(200).json({
@@ -36,7 +33,6 @@ app.get("/api/v1/courses", async (request, response) => {
   }
 });
 
-// get one specific restauraunt
 app.get("/api/v1/courses/:id", async (request, response) => {
   const param = Number.parseInt(request.params.id, 10);
   try {
@@ -54,7 +50,6 @@ app.get("/api/v1/courses/:id", async (request, response) => {
   }
 });
 
-// update one specific restauraunt
 app.patch("/api/v1/courses/:id", async (request, response) => {
   const reqdata = request.body;
   try {
@@ -79,7 +74,6 @@ app.patch("/api/v1/courses/:id", async (request, response) => {
   }
 });
 
-// add one specific restauraunt
 app.post("/api/v1/courses", async (request, response) => {
   const reqdata = request.body;
   try {
@@ -107,7 +101,6 @@ app.post("/api/v1/courses", async (request, response) => {
   }
 });
 
-// delete one specific restauraunt
 app.delete("/api/v1/courses/:id", async (request, response) => {
   try {
     const result = await db.query("DELETE FROM courses where id = $1", [request.params.id])
