@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RootLayout from "../components/RootLayout";
 import CourseSearchPage from "../routes/CourseSearch";
 import CourseDetails from "../routes/CourseDetails";
-import HomePage from "../routes/HomePage";
+import HomePage, {loadCourses} from "../routes/HomePage";
 import "./App.css";
 
 function App() {
@@ -15,6 +15,7 @@ function App() {
         {
           index: true,
           element: <HomePage />,
+          loader: loadCourses
         },
         {
           path: "courseSearch",
