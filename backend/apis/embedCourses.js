@@ -1,8 +1,8 @@
 require("dotenv").config();
+const { text } = require("express");
 const {pineconeUpsert} = require('./pineconeupsert');
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
-const fs = require('fs');
 
 const createEmbeddings = async (token, model, input) => {
   const response = await fetch("https://api.openai.com/v1/embeddings", {
@@ -55,13 +55,14 @@ const coursesToPineCone = async () => {
         department: allCourses[i].department,
         description: allCourses[i].description,
       };
-      let textIdentifier = `${allCourses[i].title}. ${allCourses[i].description}`;
+      let textIdentifier = `${allCourses[i].id } ${allCourses[i].title}. ${allCourses[i].description}`;
       textIdentifier = textIdentifier.replace("\n", " ");
       courseDict.values = await createEmbeddings(
           process.env.OPENAI_API_KEY,
           "text-embedding-ada-002",
           textIdentifier
         );
+      console.log(courseDict.id, "|", textIdentifier) // so i can see what's going on
       courseList.vectors.push(courseDict);
     } catch (err) {
       console.log("Error in", err);

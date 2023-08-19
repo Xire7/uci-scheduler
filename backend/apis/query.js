@@ -23,7 +23,7 @@ const queryDB = async (targetStr) => {
   vector = vector[0].embedding; // now its an array of floats
   console.log(vector);
   const queryRequest = {
-    topK: 10,
+    topK: 15,
     vector: vector,
     includeMetadata: true,
     namespace: 'uci-courses'
