@@ -24,13 +24,13 @@ const SignIn = (
       admin
     </MenuButton>
     <MenuList>
-      <MenuGroup title="Settings">
+      <MenuGroup title="General">
         <MenuItem>Save Courses</MenuItem>
-        <MenuItem>Change Password</MenuItem>
+        <MenuItem>Write Feedback</MenuItem>
       </MenuGroup>
       <MenuDivider />
       <MenuGroup title="Account">
-        <MenuItem>Sign Out</MenuItem>
+        <MenuItem>Change Users</MenuItem>
       </MenuGroup>
     </MenuList>
   </Menu>

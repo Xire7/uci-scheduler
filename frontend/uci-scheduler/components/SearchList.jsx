@@ -9,12 +9,13 @@ import {
   TableCaption,
   TableContainer,
   Button,
+  Tooltip,
 } from "@chakra-ui/react";
 import { PlusSquareIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 
 const onAddHandler = async (data, timeObj, navigate) => {
-  console.log(data, timeObj, 'from addHandler');
+  console.log(data, timeObj, "from addHandler");
   const dataObj = {
     department: data.metadata.department,
     description: data.metadata.description,
@@ -23,16 +24,28 @@ const onAddHandler = async (data, timeObj, navigate) => {
     username: "admin",
     year: timeObj.year,
     quarter: timeObj.quarter,
+  };
+  try {
+    const result = await fetch("http://localhost:3005/api/v1/courses/add", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(dataObj),
+    });
+    navigate("/", {
+      state: {
+        type: "POST",
+        id: data.id,
+        title: data.metadata.title,
+        username: "admin",
+        quarter: timeObj.quarter,
+        year: timeObj.year,
+      },
+    }); // change username later!!! (its hardcoded rn)
+  } catch (error) {
+    console.log("Error", error);
   }
-  const result = await fetch('http://localhost:3005/api/v1/courses/add', {
-    headers: {
-      "Content-Type" : "application/json"
-    },
-    method: "POST",
-    body: JSON.stringify(dataObj)
-  })
-  navigate('/'); // IF DELETE WORKS, PROBABLY IS JUST BEST TO TRY RE-RENDERING THE PREVIOUS ROOT COMPONENT JUST LIKE HOW DELETE CAN RERENDER IT ALL
-
 };
 
 const SearchList = ({ results, timeObj }) => {
@@ -57,7 +70,14 @@ const SearchList = ({ results, timeObj }) => {
                 return (
                   <Tr key={element.id}>
                     <Td>
-                      <Button w={5} h={7} left={-1} onClick={async () => {await onAddHandler(element, timeObj, navigate)}}>
+                      <Button
+                        w={5}
+                        h={7}
+                        left={-1}
+                        onClick={async () => {
+                          await onAddHandler(element, timeObj, navigate);
+                        }}
+                      >
                         <PlusSquareIcon w={5} h={5} />
                       </Button>
                     </Td>

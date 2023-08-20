@@ -15,7 +15,7 @@ import {
 import SearchList from "./SearchList";
 import React, { useState, useRef } from "react";
 
-const HomeDrawer = ({ isOpen, onClose }) => {
+const HomeDrawer = ({ isOpen, onClose, values, setValues }) => {
   const [exist, setExistence] = useState(isOpen);
   const [searchList, setSearchList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -36,7 +36,10 @@ const HomeDrawer = ({ isOpen, onClose }) => {
 
   const onSearchHandler = async (event) => {
     event.preventDefault();
-    timeObj.current = { quarter: event.target[1].value, year: parseInt(event.target[2].value,10)};
+    timeObj.current = {
+      quarter: event.target[1].value,
+      year: parseInt(event.target[2].value, 10),
+    };
     console.log(timeObj.current);
     const courseInput = {
       course: event.target[0].value.includes("ICS")
@@ -69,13 +72,13 @@ const HomeDrawer = ({ isOpen, onClose }) => {
     <Drawer
       isOpen={exist}
       placement="right"
-      onClose={onClose}
+      onClose={()=>{setValues(null); onClose()}}
       finalFocusRef={btnRef}
       size={changeDrawerSize(longestWord.current)}
     >
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerCloseButton />
+        <DrawerCloseButton onClick={() => {setValues(null)}}/>
         <DrawerHeader marginBottom="-5">Search Courses</DrawerHeader>
         <DrawerBody>
           {/* BASICALLY ADD A PLUS SIGN TO ALL OF THE LISTS AND IF ITS CLICKED IT SHOULD OPEN THE MODAL WITH DEFAULT VALUES FOR THE INPUTS BELOW VVVV*/}
@@ -103,13 +106,19 @@ const HomeDrawer = ({ isOpen, onClose }) => {
               marginBottom="8"
               required
               name="quarter"
+              defaultValue={values ? values.quarter : ""}
             >
               <option value="fall">Fall</option>
               <option value="winter">Winter</option>
               <option value="spring">Spring</option>
               <option value="summer">Summer</option>
             </Select>
-            <Select placeholder="Select year" required name="year">
+            <Select
+              placeholder="Select year"
+              required
+              name="year"
+              defaultValue={values ? values.year : ""}
+            >
               <option value="2024">2024</option>
               <option value="2023">2023</option>
               <option value="2022">2022</option>
@@ -117,7 +126,7 @@ const HomeDrawer = ({ isOpen, onClose }) => {
               <option value="2020">2020</option>
             </Select>
             {loading === false ? (
-              <SearchList results={searchList} timeObj={timeObj.current}/>
+              <SearchList results={searchList} timeObj={timeObj.current} />
             ) : (
               <>
                 <Spinner

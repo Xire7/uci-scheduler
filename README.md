@@ -30,6 +30,12 @@ This was a nice project to work on to solidify CRUD topics, backend work with Po
 - [ ] also find a way to add a space between DEPT and ID 
 - [ ] maybe useEffect will be useful for the randomly switch colors when you press add course?
 - [ ] fix how inaccurate the database data fetch is, prioritize keywords first in ID if they are retrieved from vectorDB, but that includes adding space between DEPT and ID
+- [ ] title should also be customizable by the user for each list, and each list should ask for a year timeframe
+- [ ] add prerequisite check!
+- [ ] add a description to the drawer when there are no search elements loaded
+- [ ] add plus buttons to every card which automatically procs the drawer and has those filled out except for course name
+- [ ] add description to the bottom when there are no courses initially chosen
+- [ ] how does the ref targetting work for the popover tags?
 
 
 ## Kudos 🎨
