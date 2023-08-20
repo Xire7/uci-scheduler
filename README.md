@@ -1,7 +1,7 @@
 # **Zot N' Schedule (uci-scheduler)** 🔥💖
 Zot N' Schedule (name still pending) helps a student plan out their four years using a natural language search engine wired to UCI's course data.
 
-# **Zot N' Schedule Walkthrough** 🚀
+# **Video Walkthrough** 🚀
 <img src='https://github.com/Xire7/uci-scheduler/blob/main/frontend/uci-scheduler/images/ZotNScheduleDraft2.gif' title='Video Walkthrough' width='' alt='Video Walkthrough: '></img>
 
 # **Tech Stack** 💻⛄
