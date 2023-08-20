@@ -2,7 +2,7 @@
 Zot N' Schedule (name still pending) helps a student plan out their four years using a natural language search engine wired to UCI's course data.
 
 # **Video Walkthrough** 🚀
-<img src='https://github.com/Xire7/uci-scheduler/blob/main/frontend/uci-scheduler/images/ZotNScheduleDraft2.gif' title='Video Walkthrough' width='' alt='Video Walkthrough: '></img>
+<img src='https://github.com/Xire7/uci-scheduler/blob/main/frontend/uci-scheduler/images/ZotNScheduleDraft3.gif' title='Video Walkthrough' width='' alt='Video Walkthrough: '></img>
 
 # **Tech Stack** 💻⛄
 - [X] PERN Stack (PostgreSQL, Express, React, Node) 
@@ -26,9 +26,9 @@ This was a nice project to work on to solidify CRUD topics, backend work with Po
 
 
 ## To-do List (MANY bugs/QoL to fix too!) 🌪️
-- [ ] figure out how to rerender when adding classes and removing classes without using a hard refresh through useNavigate
+- # (Next Priority) Scale the website to allow other users to access databases and be able to schedule simultaneously without unauthorized interferences 
+- [X] figure out how to rerender when adding classes and removing classes without using a hard refresh through useNavigate
 - [ ] also find a way to add a space between DEPT and ID 
-- [ ] maybe useEffect will be useful for the randomly switch colors when you press add course?
 - [ ] fix how inaccurate the database data fetch is, prioritize keywords first in ID if they are retrieved from vectorDB, but that includes adding space between DEPT and ID
 - [ ] title should also be customizable by the user for each list, and each list should ask for a year timeframe
 - [ ] add prerequisite check!

@@ -38,7 +38,7 @@ function HomePage() {
       ) : (
         <HomeDashboard courses={data} onReload={setReload} />
       )}
-      <section style={{ marginTop: "17.7rem" }}>hehe</section>
+      <section style={{ marginTop: "32rem" }}>hehe</section>
       <footer
         style={{
           position: "fixed",
