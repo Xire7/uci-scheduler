@@ -13,13 +13,13 @@ Zot N' Schedule (name still pending) helps a student plan out their four years u
     - React Router
 
 * Back-End: Node.js
--  PostgreSQL
--  Express.js
--  PineconeDB 
+    -  PostgreSQL
+    -  Express.js
+    -  PineconeDB 
 
 * External APIs:
-- OpenAI Embeddings API
-- PeterPortal Course Info API
+    - OpenAI Embeddings API
+    - PeterPortal Course Info API
 
 
 This was a nice project to work on to solidify CRUD topics, backend work with PostgreSQL and express routing, as well as node.js fetch API calls and working more with react routing and states! Definitely many things to fix/touch-up too.
