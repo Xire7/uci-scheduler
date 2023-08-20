@@ -3,10 +3,11 @@ import classes from "./css/HomePage.module.css";
 import HomeDashboard from "../components/HomeDashboard";
 import { useLoaderData, useNavigation } from "react-router-dom";
 
-import React from "react";
+import React, {useState} from "react";
 import { CardFooter } from "@chakra-ui/react";
 
 function HomePage() {
+  const [reload, setReload] = useState(false);
   const navigation = useNavigation();
   const data = useLoaderData().data.courses;
   console.log(data);
@@ -14,12 +15,12 @@ function HomePage() {
     <>
       <div className={classes.header}>
         <img src={ZotnZaza} alt="Zot N Zaza" style={{ height: "7rem" }} />
-        <h1>Zot N' Schedule</h1>
+        <h1>Zot N' Schedule</h1> 
       </div>
       {navigation.state === "loading" ? (
         <Spinner size="xl" color="teal" />
       ) : (
-        <HomeDashboard courses={data} />
+        <HomeDashboard courses={data} onReload={setReload}/>
       )}
     <section style={{marginTop: '17.7rem'}}>
       hehe

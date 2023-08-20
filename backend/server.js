@@ -110,17 +110,20 @@ app.patch("/api/v1/courses/:id", async (request, response) => {
   }
 });
 
-app.post("/api/v1/courses/:id", async (request, response) => {
+app.post("/api/v1/courses/add", async (request, response) => {
   const reqdata = request.body;
+  console.log(reqdata);
   try {
     const result = await db.query(
-      "INSERT INTO courses (title, number, department, description, id) VALUES ($1, $2, $3, $4, $5) returning *",
+      "INSERT INTO courses (title, department, description, id, username, year, quarter) VALUES ($1, $2, $3, $4, $5, $6, $7) returning *",
       [
         reqdata.title,
-        reqdata.number,
         reqdata.department,
         reqdata.description,
         reqdata.id,
+        reqdata.username,
+        reqdata.year,
+        reqdata.quarter
       ]
     );
     response.status(201).json({
@@ -137,10 +140,11 @@ app.post("/api/v1/courses/:id", async (request, response) => {
   }
 });
 
-app.delete("/api/v1/courses/:id", async (request, response) => {
+app.delete("/api/v1/courses/delete", async (request, response) => {
+  console.log(request.body);
   try {
-    const result = await db.query("DELETE FROM courses where id = $1", [
-      request.params.id,
+    const result = await db.query("DELETE FROM courses where id = $1 AND username = $2", [
+      request.body.id, request.body.username
     ]);
     response.status(200).json({
       status: "success",

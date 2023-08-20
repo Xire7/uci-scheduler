@@ -12,7 +12,7 @@ import {
 
 
 // basically you need like 4 courselists, each courselist will correspond to a year, and each element will need to be placed in a year's quarter
-const CourseList = ({ courses }) => {
+const CourseList = ({ courses, onReload }) => {
   return (
     <>
     <h1>2023-24 Course</h1>
@@ -21,7 +21,7 @@ const CourseList = ({ courses }) => {
             <CardHeader>
               <Heading size="md">Fall 2023</Heading>
             </CardHeader>
-            <CardBody>
+            <CardBody display="flex" flexDirection="column">
               {courses.length === 0 ? (
                 <Text>No courses listed for this quarter!</Text>
               ) : (
@@ -33,7 +33,8 @@ const CourseList = ({ courses }) => {
                       department={element.department}
                       description={element.description}
                       title={element.title}
-                      number={element.number}
+                      username={element.username}
+                      onReload={onReload}
                     />
                   );
                 })

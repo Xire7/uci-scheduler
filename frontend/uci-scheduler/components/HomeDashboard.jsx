@@ -51,10 +51,9 @@ import {useState} from 'react';
 //   }
 // };
 
-function HomeDashboard({ courses }) {
+function HomeDashboard({ courses, onReload }) {
   const [openState, setIsOpen] = useState(false);
   const btnRef = React.useRef();
-  const {onClose} = useDisclosure();
   
   const dashBoard = (
     <Card align="center" boxShadow={'md'}>
@@ -62,11 +61,11 @@ function HomeDashboard({ courses }) {
         {courses.length === 0 ? (
           <Text>You don't have any courses planned yet!</Text>
         ) : (
-          <CourseList courses={courses}/>
+          <CourseList courses={courses} onReload={onReload}/>
         )}
       </CardBody>
       <CardFooter>
-        <Button ref={btnRef} colorScheme="blue" onClick={() => {console.log('proc'); setIsOpen(true);}}>
+        <Button ref={btnRef} colorScheme="blue" onClick={() => {setIsOpen(true);}}>
         <AddIcon marginRight={1.5} h={4} w={4}/> Add Courses 
         </Button>{" "}
       </CardFooter>
@@ -129,7 +128,6 @@ function HomeDashboard({ courses }) {
     <>
       {dashBoard}
       {openState === true ? <HomeDrawer isOpen={openState} onClose={setIsOpen}/> : ""}
-      {console.log(openState)}
       {/* {drawer} */}
     </>
   );
