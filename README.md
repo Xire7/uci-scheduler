@@ -1,7 +1,8 @@
 # uci-scheduler
 UCI Scheduling app using openAI's embed API for natural language search and ICSSC's PeterPortal API for UCI information.
-👉🏿<img src='https://imgur.com/a/ymSgpAv.gifv' title='Zot N Scheduler Walkthrough' width='' alt='Video Walkthrough: '> Gulp </img>
 
+# scheduler walkthrough-gif
+![]https://github.com/Xire7/uci-scheduler/blob/main/frontend/uci-scheduler/images/ZotNScheduleDraft1.gif
 
 inspired by Zot4Plan and deezy#2930's zotsearch.
 check them both out here:
