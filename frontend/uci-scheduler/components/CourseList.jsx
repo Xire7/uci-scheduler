@@ -10,59 +10,61 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-const scheduleGrid = (
-  <SimpleGrid columns={4} spacing={3}>
-    <Card>
-      <CardHeader>
-        <Heading size="md">Fall</Heading>
-      </CardHeader>
-      <CardBody>
-        <Text>No courses listed for this quarter!</Text>
-      </CardBody>
-    </Card>
-    <Card>
-      <CardHeader>
-        <Heading size="md">Winter</Heading>
-      </CardHeader>
-      <CardBody>
-        <Text>No courses listed for this quarter!</Text>
-      </CardBody>
-    </Card>
-    <Card>
-      <CardHeader>
-        <Heading size="md">Spring</Heading>
-      </CardHeader>
-      <CardBody>
-        <Text>No courses listed for this quarter!</Text>
-      </CardBody>
-    </Card>
-    <Card>
-      <CardHeader>
-        <Heading size="md">Summer</Heading>
-      </CardHeader>
-      <CardBody>
-        <Text>No courses listed for this quarter!</Text>
-      </CardBody>
-    </Card>
-  </SimpleGrid>
-);
 
+// basically you need like 4 courselists, each courselist will correspond to a year, and each element will need to be placed in a year's quarter
 const CourseList = ({ courses }) => {
   return (
     <>
-      {scheduleGrid}
-      {courses.map((element) => {
-        return (
-          <CourseCard
-            key={element.id}
-            id={element.id}
-            department={element.department}
-            description={element.description}
-            title={element.title}
-            number={element.number}
-          />
-        );
-      })}
+    <h1>2023-24 Course</h1>
+      <SimpleGrid columns={4} spacing={3}>
+          <Card>
+            <CardHeader>
+              <Heading size="md">Fall 2023</Heading>
+            </CardHeader>
+            <CardBody>
+              {courses.length === 0 ? (
+                <Text>No courses listed for this quarter!</Text>
+              ) : (
+                courses.map((element) => {
+                  return (
+                    <CourseCard
+                      key={element.id}
+                      id={element.id}
+                      department={element.department}
+                      description={element.description}
+                      title={element.title}
+                      number={element.number}
+                    />
+                  );
+                })
+              )}
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>
+              <Heading size="md">Winter 2024</Heading>
+            </CardHeader>
+            <CardBody>
+              <Text>No courses listed for this quarter!</Text>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>
+              <Heading size="md">Spring 2024</Heading>
+            </CardHeader>
+            <CardBody>
+              <Text>No courses listed for this quarter!</Text>
+            </CardBody>
+          </Card>
+          <Card>
+            <CardHeader>
+              <Heading size="md">Summer 2024</Heading>
+            </CardHeader>
+            <CardBody>
+              <Text>No courses listed for this quarter!</Text>
+            </CardBody>
+          </Card>
+      </SimpleGrid>
     </>
   );
 };

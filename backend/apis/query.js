@@ -31,6 +31,7 @@ const queryDB = async (targetStr) => {
   let result = await index.query({queryRequest});
   result = result.matches; //array of the closest matches
   console.log(result);
+  return result;
 };
 
 module.exports = { queryDB };

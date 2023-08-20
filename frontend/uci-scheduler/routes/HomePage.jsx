@@ -4,6 +4,7 @@ import HomeDashboard from "../components/HomeDashboard";
 import { useLoaderData, useNavigation } from "react-router-dom";
 
 import React from "react";
+import { CardFooter } from "@chakra-ui/react";
 
 function HomePage() {
   const navigation = useNavigation();
@@ -13,13 +14,19 @@ function HomePage() {
     <>
       <div className={classes.header}>
         <img src={ZotnZaza} alt="Zot N Zaza" style={{ height: "7rem" }} />
-        <h1>Peter Schedeater</h1>
+        <h1>Zot N' Schedule</h1>
       </div>
       {navigation.state === "loading" ? (
         <Spinner size="xl" color="teal" />
       ) : (
         <HomeDashboard courses={data} />
       )}
+    <section style={{marginTop: '17.7rem'}}>
+      hehe
+    </section>
+    <footer style={{position: 'fixed', bottom: '2px', right: '20px', textAlign: 'right', fontSize: '0.7rem'}}>
+    ©2023 Made with ♡ by Zion M.
+    </footer>
     </>
   );
 }

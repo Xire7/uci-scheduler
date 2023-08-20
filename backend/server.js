@@ -24,7 +24,6 @@ app.get("/api/v1/courses", async (request, response) => {
   // embedCourses();
   try {
     const result = await db.query("select * from courses");
-    console.log(result);
     response.status(200).json({
       status: "success",
       results: result.rows.length,
@@ -41,14 +40,40 @@ app.get("/api/v1/courses", async (request, response) => {
 app.post("/api/v1/courses", async (request, response) => {
   // try {
   const courseInput = request.body.course;
-  queryDB(courseInput);
+  try {
+    const result = await queryDB(courseInput);
+    response.status(200).json({
+      status: "success",
+      results: result.rows.length,
+      data : {
+        courses: result.rows,
+      }
+    });
+  } catch (error) {
+    console.log("Error:", error);
+  };
+});
+
+app.post("/api/v1/search", async (request, response) => {
+  // try {
+  const courseInput = request.body.course;
+  try {
+    const result = await queryDB(courseInput);
+    response.status(200).json({
+      status: "success",
+      data : {
+        courses: result,
+      }
+    });
+  } catch (error) {
+    console.log("Error:", error);
+  };
 });
 
 app.get("/api/v1/courses/:id", async (request, response) => {
   const param = Number.parseInt(request.params.id, 10);
   try {
     const result = await db.query("select * from courses WHERE id = $1");
-    console.log(result);
     response.status(200).json({
       status: "success",
       results: result.rows.length,

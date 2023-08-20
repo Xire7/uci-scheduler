@@ -4,11 +4,15 @@
   padding: 2rem;
   text-align: center;
   background-color: aliceblue;
+  background-size: cover;
 }
 
-html {
-}
+body {
+  background-color: aliceblue;
+  background-size: cover;
+  overflow: auto;
 
+}
 
 .logo {
   height: 6em;
