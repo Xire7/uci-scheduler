@@ -1,8 +1,8 @@
 # **Zot N' Schedule (uci-scheduler)** 🔥💖
-UCI Scheduling app ("Zot N' Schedule") uses openAI's embed API for natural language search and ICSSC's PeterPortal API for UCI information.
+Zot N' Schedule (name still pending) helps a student plan out their four years using a natural language search engine wired to UCI's course data.
 
 # **Zot N' Schedule Walkthrough** 🚀
-👉🏿<img src='https://github.com/Xire7/uci-scheduler/blob/main/frontend/uci-scheduler/images/ZotNScheduleDraft2.gif' title='Video Walkthrough' width='' alt='Video Walkthrough: '></img>
+<img src='https://github.com/Xire7/uci-scheduler/blob/main/frontend/uci-scheduler/images/ZotNScheduleDraft2.gif' title='Video Walkthrough' width='' alt='Video Walkthrough: '></img>
 
 # **Tech Stack** 💻⛄
 - [X] PERN Stack (PostgreSQL, Express, React, Node) 
@@ -11,12 +11,15 @@ UCI Scheduling app ("Zot N' Schedule") uses openAI's embed API for natural langu
     - Chakra React & Icons UI
     - Fetch API
     - React Router
-    - OpenAI Embeddings API
 
 * Back-End: Node.js
--   [X] PostgreSQL
--   [X] Express.js
--   [X] PineconeDB 
+-  PostgreSQL
+-  Express.js
+-  PineconeDB 
+
+* External APIs:
+- OpenAI Embeddings API
+- PeterPortal Course Info API
 
 
 This was a nice project to work on to solidify CRUD topics, backend work with PostgreSQL and express routing, as well as node.js fetch API calls and working more with react routing and states! Definitely many things to fix/touch-up too.
