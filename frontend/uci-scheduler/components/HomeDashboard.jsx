@@ -113,58 +113,6 @@ function HomeDashboard({ courses, onReload }) {
     );
   };
 
-  // const drawer = (
-  //   <Drawer
-  //     isOpen={isOpen}
-  //     placement="right"
-  //     onClose={onClose}
-  //     finalFocusRef={btnRef}
-  //     size="lg"
-  //   >
-  //     <DrawerOverlay />
-  //     <DrawerContent>
-  //       <DrawerCloseButton />
-  //       <DrawerHeader marginBottom='-5'>
-  //         Search Courses
-  //       </DrawerHeader>
-  //       <DrawerBody>
-  //         {/* BASICALLY ADD A PLUS SIGN TO ALL OF THE LISTS AND IF ITS CLICKED IT SHOULD OPEN THE MODAL WITH DEFAULT VALUES FOR THE INPUTS BELOW VVVV*/}
-  //         <form id="courseForm" method="GET" onSubmit={async (event) => {const result = await onSearchHandler(event); console.log(result)}}>
-  //           <DrawerHeader marginLeft='-5'>Course Name</DrawerHeader>
-  //           <Input
-  //             placeholder="Type course here..."
-  //             size="lg"
-  //             style={{ marginBottom: "2rem" }}
-  //             name="courseName"
-  //           />
-  //           <Select placeholder='Select quarter' marginBottom='8'>
-  //           <option value='fall'>Fall</option>
-  //           <option value='winter'>Winter</option>
-  //           <option value='spring'>Spring</option>
-  //           <option value='summer'>Summer</option>
-  //           </Select>
-  //           <Select placeholder='Select year'>
-  //           <option value='2024'>2024</option>
-  //           <option value='2023'>2023</option>
-  //           <option value='2022'>2022</option>
-  //           <option value='2021'>2021</option>
-  //           <option value='2020'>2020</option>
-  //           </Select>
-
-  //           <SearchList/>
-  //         </form>
-  //       </DrawerBody>
-  //       <DrawerFooter>
-  //         <Button variant="outline" mr={3} onClick={onClose}>
-  //           Cancel
-  //         </Button>
-  //         <Button type="submit" colorScheme="blue" form="courseForm">
-  //           Search
-  //         </Button>
-  //       </DrawerFooter>
-  //     </DrawerContent>
-  //   </Drawer>
-  // );
   return (
     <>
       {filterCourses(courses)}

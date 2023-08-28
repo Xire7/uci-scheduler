@@ -10,7 +10,7 @@ import {
   Text,
   Divider,
 } from "@chakra-ui/react";
-import {EditIcon, SearchIcon} from "@chakra-ui/icons"
+import {EditIcon, SearchIcon, WarningIcon} from "@chakra-ui/icons"
 
 // basically you need like 4 courselists, each courselist will correspond to a year, and each element will need to be placed in a year's quarter
 const CourseList = ({ courses, onReload, year, open, setValues }) => {

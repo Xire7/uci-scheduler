@@ -14,19 +14,52 @@ import {
   CloseButton,
 } from "@chakra-ui/react";
 
+async function prereqCheck(id) {
+  if (id.includes("I&CSCI")) {
+    id = id.replace("I&CSCI", "I%26CSCI");
+  } else if (id.includes("CRM/LAW")) {
+    id = id.replace("CRM/LAW", "CRM%2FLAW");
+  }
+
+  const result = await fetch(
+    `https://api-next.peterportal.org/v1/rest/courses/${id}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "GET",
+    }
+  );
+  return result.json();
+}
+
 function HomePage() {
   const { state } = useLocation();
   console.log(state);
   window.history.replaceState({}, document.title);
   const [reload, setReload] = useState(false);
   const navigation = useNavigation();
-  const data = useLoaderData().data.courses;
+  // const [courseData, setCourseData] = useState(useLoaderData());
+  const data = useLoaderData();
+
+  // check to see if valid prereqs for all of them, can probably optimize to make it worst case O(N).
+
   return (
     <>
       {state != null && (
-        <Alert status="success" variant="left-accent" mt={6} mb={4} >
+        <Alert status="success" variant="left-accent" mt={6} mb={4}>
           <AlertIcon />
-          {state.type === "POST" ? `${state.id}: ${state.title} was ADDED to ${state.quarter.toUpperCase().substring(0,1) + state.quarter.substring(1)} ${state.year}!` : `${state.id}: ${state.title} was REMOVED from ${state.quarter.toUpperCase().substring(0,1) + state.quarter.substring(1)} ${state.quarter != 'fall' ? parseInt(state.year) + 1 : state.year}!`}
+          {state.type === "POST"
+            ? `${state.id}: ${state.title} was ADDED to ${
+                state.quarter.toUpperCase().substring(0, 1) +
+                state.quarter.substring(1)
+              } ${state.year}!`
+            : `${state.id}: ${state.title} was REMOVED from ${
+                state.quarter.toUpperCase().substring(0, 1) +
+                state.quarter.substring(1)
+              } ${
+                state.quarter != "fall" ? parseInt(state.year) + 1 : state.year
+              }!`}
         </Alert>
       )}
       <div className={classes.header}>
@@ -64,7 +97,19 @@ export const loadCourses = async (request, response) => {
       },
       method: "GET",
     });
-    return result.json();
+    let courseData = await result.json();
+    courseData = courseData.data.courses;
+    // console.log(courseData);
+
+    if (localStorage.getItem("prereqCheck") != null) {
+      localStorage.removeItem("prereqCheck");
+      for (let i = 0; i < courseData.length; ++i) {
+        const result = await prereqCheck(courseData[i].id);
+        console.log(result);
+        courseData.extraMetadata = result;
+      }
+    }
+    return courseData;
   } catch (err) {
     console.log(err);
   }

@@ -16,7 +16,8 @@ import { useNavigate } from "react-router-dom";
 
 const onAddHandler = async (data, timeObj, navigate) => {
   console.log(data, timeObj, "from addHandler");
-  const dataObj = {
+  console.log(data.metadata);
+  let dataObj = {
     department: data.metadata.department,
     description: data.metadata.description,
     title: data.metadata.title,
@@ -26,6 +27,31 @@ const onAddHandler = async (data, timeObj, navigate) => {
     quarter: timeObj.quarter,
   };
   try {
+
+
+    // first order of business, remove O(N) cycling of each course data. then look below
+
+    // YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO SO BASICALLY HERE we want to retrieve additional info to add to the database.
+    // however we can't add a prereq tree to the database since thats too complex
+    // we could still store what prereqs are missing / the prereq that broke the validity
+    // or we could also translate the tree into AND OR english, then show what prereq first broke it as stated above
+    // in addition to prereq tree, add course units, courseLevel (low/upper div), prereqFor, preReqList, preReqText (whatever that is?)
+
+
+
+    // we want to add the more indepth details such as courseLevel, prerequisite tree and prerequisite list, and maxUnits
+    // const additionalData = await fetch(
+    //   `https://api-next.peterportal.org/v1/rest/courses/${dataObj.id}`,
+    //   {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     method: "GET",
+    //   }
+    // );
+    // let additionalDataResult = await additionalData.json();
+    // additionalDataResult = additionalDataResult.payload.prequisiteFor;
+    // dataObj = {...dataObj, additionalDataResult}
     const result = await fetch("http://localhost:3005/api/v1/courses/add", {
       headers: {
         "Content-Type": "application/json",
@@ -33,6 +59,7 @@ const onAddHandler = async (data, timeObj, navigate) => {
       method: "POST",
       body: JSON.stringify(dataObj),
     });
+    localStorage.setItem("prereqCheck", "true");
     navigate("/", {
       state: {
         type: "POST",
