@@ -33,7 +33,7 @@ const CourseList = ({ courses, onReload, year, open, setValues }) => {
               <Text>No courses listed for this quarter!</Text>
             ) : (
               quarterCourses[quarter].map((element) => {
-                units = units + 4;
+                units = units + element.maxunits;
                 return (
                   <CourseCard
                     key={element.id}
@@ -45,6 +45,10 @@ const CourseList = ({ courses, onReload, year, open, setValues }) => {
                     onReload={onReload}
                     year={year}
                     quarter={quarter}
+                    courseLevel={element.courselevel}
+                    maxUnits={element.maxunits}
+                    prerequisiteFor={element.prerequisitefor}
+                    prerequisiteText={element.prerequisitetext}
                   />
                 );
               })

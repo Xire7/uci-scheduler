@@ -28,30 +28,41 @@ const onAddHandler = async (data, timeObj, navigate) => {
   };
   try {
 
-
-    // first order of business, remove O(N) cycling of each course data. then look below
-
-    // YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO SO BASICALLY HERE we want to retrieve additional info to add to the database.
     // however we can't add a prereq tree to the database since thats too complex
     // we could still store what prereqs are missing / the prereq that broke the validity
     // or we could also translate the tree into AND OR english, then show what prereq first broke it as stated above
-    // in addition to prereq tree, add course units, courseLevel (low/upper div), prereqFor, preReqList, preReqText (whatever that is?)
-
-
+    // in addition to prereq tree, add course units, courseLevel (low/upper div), prereqFor, preReqText
+    // check preReqsFor after you delete an element
 
     // we want to add the more indepth details such as courseLevel, prerequisite tree and prerequisite list, and maxUnits
-    // const additionalData = await fetch(
-    //   `https://api-next.peterportal.org/v1/rest/courses/${dataObj.id}`,
-    //   {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     method: "GET",
-    //   }
-    // );
-    // let additionalDataResult = await additionalData.json();
-    // additionalDataResult = additionalDataResult.payload.prequisiteFor;
-    // dataObj = {...dataObj, additionalDataResult}
+    let id = dataObj.id;
+    if (id.includes("I&CSCI")) {
+      id = id.replace("I&CSCI", "I%26CSCI");
+    } else if (id.includes("CRM/LAW")) {
+      id = id.replace("CRM/LAW", "CRM%2FLAW");
+    }
+    const additionalData = await fetch(
+      `https://api-next.peterportal.org/v1/rest/courses/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "GET",
+      }
+    );
+    let additionalDataResults = await additionalData.json();
+    console.log(additionalDataResults);
+    console.log(additionalDataResults.payload);
+    const prereqTree = additionalDataResults.payload.prerequisiteTree;
+    additionalDataResults = {
+      prerequisiteText: additionalDataResults.payload.prerequisiteText,
+      prerequisiteFor: additionalDataResults.payload.prerequisiteFor,
+      courseLevel: additionalDataResults.payload.courseLevel,
+      maxUnits: additionalDataResults.payload.maxUnits,
+    };
+    dataObj = { ...dataObj, ...additionalDataResults };
+    console.log("In SearchList.jsx", dataObj);
+    // check here after
     const result = await fetch("http://localhost:3005/api/v1/courses/add", {
       headers: {
         "Content-Type": "application/json",
@@ -68,6 +79,7 @@ const onAddHandler = async (data, timeObj, navigate) => {
         username: "admin",
         quarter: timeObj.quarter,
         year: timeObj.year,
+        prereqTree: prereqTree
       },
     }); // change username later!!! (its hardcoded rn)
   } catch (error) {

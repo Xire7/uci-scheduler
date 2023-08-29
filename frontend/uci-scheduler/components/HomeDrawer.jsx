@@ -24,7 +24,8 @@ const HomeDrawer = ({ isOpen, onClose, values, setValues }) => {
   const longestWord = React.useRef(0);
 
   const lengthChecker = (course) => {
-    const results = course.data.courses;
+    console.log(course);
+    const results = course;
     longestWord.current = 0;
     for (let i = 0; i < results.length; ++i) {
       longestWord.current =
@@ -54,7 +55,30 @@ const HomeDrawer = ({ isOpen, onClose, values, setValues }) => {
         method: "POST",
         body: JSON.stringify(courseInput),
       });
-      return result.json();
+
+      let resultData = await result.json();
+      resultData = resultData.data.courses;
+      console.log(resultData);
+      const query = courseInput.course.toUpperCase();
+      let query2;
+      for (let i = 0; i < query.length; ++i) {
+        if (query[i] === " ") {
+          query2 = query.substring(0, i) + query.substring(i + 1);
+          break;
+        } else if (!isNaN(query[i])) {
+          query2 = query.substring(0, i) + " " + query.substring(i);
+          break;
+        }
+      }
+      console.log(query2);
+      console.log(query);
+      for (let i = 0; i < resultData.length; ++i) {
+        if (query === resultData[i].id || query2 === resultData[i].id) {
+          [resultData[0], resultData[i]] = [resultData[i], resultData[0]];
+          console.log("swapped");
+        }
+      }
+      return resultData;
     } catch (err) {
       console.log(err);
     }
@@ -72,13 +96,20 @@ const HomeDrawer = ({ isOpen, onClose, values, setValues }) => {
     <Drawer
       isOpen={exist}
       placement="right"
-      onClose={()=>{setValues(null); onClose()}}
+      onClose={() => {
+        setValues(null);
+        onClose();
+      }}
       finalFocusRef={btnRef}
       size={changeDrawerSize(longestWord.current)}
     >
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerCloseButton onClick={() => {setValues(null)}}/>
+        <DrawerCloseButton
+          onClick={() => {
+            setValues(null);
+          }}
+        />
         <DrawerHeader marginBottom="-5">Search Courses</DrawerHeader>
         <DrawerBody>
           {/* BASICALLY ADD A PLUS SIGN TO ALL OF THE LISTS AND IF ITS CLICKED IT SHOULD OPEN THE MODAL WITH DEFAULT VALUES FOR THE INPUTS BELOW VVVV*/}
@@ -90,8 +121,7 @@ const HomeDrawer = ({ isOpen, onClose, values, setValues }) => {
               const result = await onSearchHandler(event);
               lengthChecker(result);
               setLoading(false);
-              setSearchList(result.data.courses);
-              // console.log(result);
+              setSearchList(result);
             }}
           >
             <DrawerHeader marginLeft="-5">Course Name</DrawerHeader>
@@ -117,13 +147,18 @@ const HomeDrawer = ({ isOpen, onClose, values, setValues }) => {
               placeholder="Select year"
               required
               name="year"
-              defaultValue={values ? values.year : ""}
+              defaultValue={values ? values.year : "2023"}
             >
+              <option value="2027">2027</option>
+              <option value="2026">2026</option>
+              <option value="2025">2025</option>
               <option value="2024">2024</option>
               <option value="2023">2023</option>
               <option value="2022">2022</option>
               <option value="2021">2021</option>
               <option value="2020">2020</option>
+              <option value="2019">2019</option>
+
             </Select>
             {loading === false ? (
               <SearchList results={searchList} timeObj={timeObj.current} />

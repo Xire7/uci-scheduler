@@ -14,24 +14,24 @@ import {
   CloseButton,
 } from "@chakra-ui/react";
 
-async function prereqCheck(id) {
-  if (id.includes("I&CSCI")) {
-    id = id.replace("I&CSCI", "I%26CSCI");
-  } else if (id.includes("CRM/LAW")) {
-    id = id.replace("CRM/LAW", "CRM%2FLAW");
-  }
+// async function prereqCheck(id) {
+//   if (id.includes("I&CSCI")) {
+//     id = id.replace("I&CSCI", "I%26CSCI");
+//   } else if (id.includes("CRM/LAW")) {
+//     id = id.replace("CRM/LAW", "CRM%2FLAW");
+//   }
 
-  const result = await fetch(
-    `https://api-next.peterportal.org/v1/rest/courses/${id}`,
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "GET",
-    }
-  );
-  return result.json();
-}
+//   const result = await fetch(
+//     `https://api-next.peterportal.org/v1/rest/courses/${id}`,
+//     {
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       method: "GET",
+//     }
+//   );
+//   return result.json();
+// }
 
 function HomePage() {
   const { state } = useLocation();
@@ -103,11 +103,11 @@ export const loadCourses = async (request, response) => {
 
     if (localStorage.getItem("prereqCheck") != null) {
       localStorage.removeItem("prereqCheck");
-      for (let i = 0; i < courseData.length; ++i) {
-        const result = await prereqCheck(courseData[i].id);
-        console.log(result);
-        courseData.extraMetadata = result;
-      }
+      // for (let i = 0; i < courseData.length; ++i) {
+      //   const result = await prereqCheck(courseData[i].id);
+      //   console.log(result);
+      //   courseData.extraMetadata = result;
+      // }
     }
     return courseData;
   } catch (err) {

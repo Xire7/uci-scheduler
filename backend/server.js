@@ -115,7 +115,7 @@ app.post("/api/v1/courses/add", async (request, response) => {
   console.log(reqdata);
   try {
     const result = await db.query(
-      "INSERT INTO courses (title, department, description, id, username, year, quarter) VALUES ($1, $2, $3, $4, $5, $6, $7) returning *",
+      "INSERT INTO courses (title, department, description, id, username, year, quarter, prerequisiteFor, prerequisiteText, courseLevel, maxUnits) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) returning *",
       [
         reqdata.title,
         reqdata.department,
@@ -123,7 +123,11 @@ app.post("/api/v1/courses/add", async (request, response) => {
         reqdata.id,
         reqdata.username,
         reqdata.year,
-        reqdata.quarter
+        reqdata.quarter,
+        reqdata.prerequisiteFor,
+        reqdata.prerequisiteText,
+        reqdata.courseLevel,
+        reqdata.maxUnits,
       ]
     );
     response.status(201).json({

@@ -26,14 +26,14 @@ This was a nice project to work on to solidify CRUD topics, backend work with Po
 
 
 ## To-do List (MANY bugs/QoL to fix too!) 🌪️
-- # (Next Priority) Scale the website to allow other users to access databases and be able to schedule simultaneously without unauthorized interferences 
-- [X] figure out how to rerender when adding classes and removing classes without using a hard refresh through useNavigate
-- [ ] also find a way to add a space between DEPT and ID 
-- [ ] fix how inaccurate the database data fetch is, prioritize keywords first in ID if they are retrieved from vectorDB, but that includes adding space between DEPT and ID
+- # [ ] Add a prerequisite tree check!
+- # [ ] Scale the website to allow other users to access databases and be able to schedule simultaneously without unauthorized interferences 
+- [X] figured out how to rerender when adding classes and removing classes without using a hard refresh through useNavigate
+- [X] also found out a way to add a space between DEPT and ID 
+- [X] fixed how inaccurate the database data fetch is, prioritize keywords first in ID if they are retrieved from vectorDB, but that includes adding space between DEPT and ID
+- [X] add plus buttons to every card which automatically procs the drawer and has those filled out except for course name
 - [ ] title should also be customizable by the user for each list, and each list should ask for a year timeframe
-- [ ] add prerequisite check!
 - [ ] add a description to the drawer when there are no search elements loaded
-- [ ] add plus buttons to every card which automatically procs the drawer and has those filled out except for course name
 - [ ] add description to the bottom when there are no courses initially chosen
 - [ ] how does the ref targetting work for the popover tags?
 
