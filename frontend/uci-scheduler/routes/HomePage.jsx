@@ -14,24 +14,154 @@ import {
   CloseButton,
 } from "@chakra-ui/react";
 
-// async function prereqCheck(id) {
-//   if (id.includes("I&CSCI")) {
-//     id = id.replace("I&CSCI", "I%26CSCI");
-//   } else if (id.includes("CRM/LAW")) {
-//     id = id.replace("CRM/LAW", "CRM%2FLAW");
-//   }
 
-//   const result = await fetch(
-//     `https://api-next.peterportal.org/v1/rest/courses/${id}`,
-//     {
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       method: "GET",
-//     }
-//   );
-//   return result.json();
-// }
+// just need to account for the course that was added and its prerequisiteFors by checking current courses
+const findPreReqs = async (addedCourse, courses) => {
+  // ---->>>>>>>> check if addedCourse's prerequisiteFors have a match with the current courses, then get the prereq tree for the current courses.
+  // this is also viable when a course is removed as well, just check if it changes the courses its a prerequisite for.
+  // basically add/deleting a course will only impact the courses it is a prerequisite for.
+  const prereqSet = new Set(addedCourse.prereqfor)
+  for (let i = 0; i < courses.length; ++i) {
+    // if (prereqSet.has())
+    const preReqTree = await refreshPreReq(courses[i]);
+    console.log(preReqTree);
+  }
+};
+
+// for performance, we will only check prereqs of this newly added object, and prereqs of any that this added/removed course would influence via PrerequisiteFor attribute.
+// if none are on there, just have the added course's prereq be checked.
+const refreshPreReq = async (id) => {
+    if (id.includes("I&CSCI")) {
+      id = id.replace("I&CSCI", "I%26CSCI");
+    } else if (id.includes("CRM/LAW")) {
+      id = id.replace("CRM/LAW", "CRM%2FLAW");
+    }
+    const additionalData = await fetch(
+      `https://api-next.peterportal.org/v1/rest/courses/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "GET",
+      }
+    );
+    let additionalDataResults = await additionalData.json();
+    const prereqTree = additionalDataResults.payload.prerequisiteTree;
+    return prereqTree;
+
+}
+// my attempt at traversing the tree, its an object with an array of objects
+function checkPreReqs(tree, courseSet, type) {
+  console.log(type);
+  let orCheck = false;
+  if (tree instanceof Array) {
+    console.log(tree, "Is array");
+    for (let i = 0; i < tree.length; ++i) {
+      console.log(`element #${i}:`, type);
+      if ("AND" in tree[i]) {
+        const boolVal = checkPreReqs(tree[i], courseSet, "AND");
+        if (type === "AND" && boolVal === false)
+          return false;
+        else if (type === "AND" && boolVal === true) {
+          continue; // keep iterating
+        }
+        else if (type === "OR" && boolVal === false) {
+          continue; // we need to see if something true is found
+        }
+        else if (type === "OR" && boolVal === true) {
+          orCheck = true; // if AND was evaluated to be true
+          return true;
+        }
+        else if (type === "base" && boolVal === true) {
+          console.log("base passed AND check");
+          return true;
+        }
+        else {
+          // if type was AND and boolVal is true
+          continue;
+        }
+      } else if ("OR" in tree[i]) {
+        const boolVal = checkPreReqs(tree[i], courseSet, "OR");
+        if (type === "OR" && boolVal === true) {
+          orCheck = true;
+          return true;
+        }
+        else if (type === "OR" && boolVal === false) {
+          continue; // keep checking through the elements
+        }
+        else if (type === "AND" && boolVal === true) {
+          continue;
+        }
+        else if (type === "AND" && boolVal === false) {
+          return false;
+        }
+        else if (type === "base" && boolVal === false) {
+          continue;
+        }
+        else if (type === "base" && boolVal === true) {
+          console.log("base passed OR check");
+          return true;
+        }
+      } else {
+        // BASE CASE || the case where the array element should be a regular object with a course id
+        if ("courseId" in tree[i]) {
+          const query = tree[i].courseId.replace(/ /g, "");
+          console.log("COURSE ID:", query);
+          console.log(courseSet.has(query));
+          if (!courseSet.has(query) && type == "AND") {
+            console.log("fails AND check");
+            return false;
+          }
+          if (!courseSet.has(query) && type == "OR") {
+            console.log(
+              "keep checking and see if orCheck is still false by the end. if it is, do a check out of this loop and return false"
+            );
+          }
+          else if (courseSet.has(query) && type == "OR"){
+              console.log("passes OR check");
+              return true;
+          }
+        } else if ("examName" in tree[i]) {
+          const query = tree[i].examName + ` (Min. Score: ${tree[i].minGrade})`;
+          console.log("AP Exam:", query, "might cause a bug");
+        }
+      }
+    }
+  } else if (tree instanceof Object) {
+    if ("AND" in tree) {
+      console.log("found 'AND' statement.. diving");
+      const boolVal = checkPreReqs(tree.AND, courseSet, "AND");
+      if (type === "base" && boolVal === false) {
+        return false;
+      }
+      // trace this later, check if the upper layer is an "AND" already
+    } else if ("OR" in tree) {
+      console.log("found 'OR' statement.. diving");
+      const boolVal = checkPreReqs(tree.OR, courseSet, "OR");
+
+      if (orCheck === false && boolVal === true) {
+        orCheck = true;
+      }
+      // trace this later, check if the upper layer is an "OR", if so, keep cycling through that layer's elements. if it never becomes true, will be caught on the end check.
+      // return boolVal;
+    }
+    console.log("Tree in this Recursion:", tree);
+
+    if (type === "OR" && orCheck === false) {
+      // might fail for "BASE" type??? make sure to trace as well later.
+      console.log("fails the OR check");
+      return false;
+    }
+
+    orCheck = true;
+    if (type === "base" && orCheck === false) {
+      console.log("base failed the OR check");
+      return false;
+    }
+    // case if its "AND" / "OR", and it never returned false from the loop above
+    return true;
+  }
+}
 
 function HomePage() {
   const { state } = useLocation();
@@ -39,10 +169,25 @@ function HomePage() {
   window.history.replaceState({}, document.title);
   const [reload, setReload] = useState(false);
   const navigation = useNavigation();
-  // const [courseData, setCourseData] = useState(useLoaderData());
   const data = useLoaderData();
-
-  // check to see if valid prereqs for all of them, can probably optimize to make it worst case O(N).
+  if (state != null) {
+    const stateObj = {id: state.id, prerequisitetree: state.prereqTree, prereqfor: state.prerequisitefor}
+    const courseIds = data.map((element)=>{return element.id}) // i don't think we need courseIds prerequisiteFors, only if you want it to be recursive
+    findPreReqs(stateObj, courseIds);
+  }
+  const test =
+    state != null
+      ? checkPreReqs(
+          state.prereqTree,
+          new Set(
+            data.map((element) => {
+              return element.id;
+            })
+          ),
+          "base"
+        )
+      : "no prereqtree";
+  console.log(test);
 
   return (
     <>
@@ -99,15 +244,9 @@ export const loadCourses = async (request, response) => {
     });
     let courseData = await result.json();
     courseData = courseData.data.courses;
-    // console.log(courseData);
 
     if (localStorage.getItem("prereqCheck") != null) {
       localStorage.removeItem("prereqCheck");
-      // for (let i = 0; i < courseData.length; ++i) {
-      //   const result = await prereqCheck(courseData[i].id);
-      //   console.log(result);
-      //   courseData.extraMetadata = result;
-      // }
     }
     return courseData;
   } catch (err) {

@@ -15,8 +15,8 @@ import { PlusSquareIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 
 const onAddHandler = async (data, timeObj, navigate) => {
-  console.log(data, timeObj, "from addHandler");
-  console.log(data.metadata);
+  // console.log(data, timeObj, "from addHandler");
+  // console.log(data.metadata);
   let dataObj = {
     department: data.metadata.department,
     description: data.metadata.description,
@@ -51,8 +51,8 @@ const onAddHandler = async (data, timeObj, navigate) => {
       }
     );
     let additionalDataResults = await additionalData.json();
-    console.log(additionalDataResults);
-    console.log(additionalDataResults.payload);
+    // console.log(additionalDataResults);
+    // console.log(additionalDataResults.payload);
     const prereqTree = additionalDataResults.payload.prerequisiteTree;
     additionalDataResults = {
       prerequisiteText: additionalDataResults.payload.prerequisiteText,
@@ -61,7 +61,7 @@ const onAddHandler = async (data, timeObj, navigate) => {
       maxUnits: additionalDataResults.payload.maxUnits,
     };
     dataObj = { ...dataObj, ...additionalDataResults };
-    console.log("In SearchList.jsx", dataObj);
+    // console.log("In SearchList.jsx", dataObj);
     // check here after
     const result = await fetch("http://localhost:3005/api/v1/courses/add", {
       headers: {
@@ -79,7 +79,8 @@ const onAddHandler = async (data, timeObj, navigate) => {
         username: "admin",
         quarter: timeObj.quarter,
         year: timeObj.year,
-        prereqTree: prereqTree
+        prereqTree: prereqTree,
+        prerequisitefor: dataObj.prerequisiteFor
       },
     }); // change username later!!! (its hardcoded rn)
   } catch (error) {

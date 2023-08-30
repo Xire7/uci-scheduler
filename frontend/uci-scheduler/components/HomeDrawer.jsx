@@ -15,7 +15,7 @@ import {
 import SearchList from "./SearchList";
 import React, { useState, useRef } from "react";
 
-const HomeDrawer = ({ isOpen, onClose, values, setValues }) => {
+const HomeDrawer = ({ isOpen, onClose, values, setValues, courseIds }) => {
   const [exist, setExistence] = useState(isOpen);
   const [searchList, setSearchList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -161,7 +161,7 @@ const HomeDrawer = ({ isOpen, onClose, values, setValues }) => {
 
             </Select>
             {loading === false ? (
-              <SearchList results={searchList} timeObj={timeObj.current} />
+              <SearchList results={searchList} timeObj={timeObj.current} courseIds={courseIds}/>
             ) : (
               <>
                 <Spinner

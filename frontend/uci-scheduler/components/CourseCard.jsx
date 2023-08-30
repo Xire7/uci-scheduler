@@ -60,7 +60,6 @@ const deleteHandler = async (
       method: "DELETE",
       body: JSON.stringify({ id: id, username: username }),
     });
-    console.log(typeof onReload);
     onReload(true); // it doesnt rerender?
     navigate("/", {
       state: {
