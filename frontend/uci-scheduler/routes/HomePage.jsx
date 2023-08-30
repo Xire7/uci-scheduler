@@ -14,13 +14,12 @@ import {
   CloseButton,
 } from "@chakra-ui/react";
 
-
 // just need to account for the course that was added and its prerequisiteFors by checking current courses
 const findPreReqs = async (addedCourse, courses) => {
   // ---->>>>>>>> check if addedCourse's prerequisiteFors have a match with the current courses, then get the prereq tree for the current courses.
   // this is also viable when a course is removed as well, just check if it changes the courses its a prerequisite for.
   // basically add/deleting a course will only impact the courses it is a prerequisite for.
-  const prereqSet = new Set(addedCourse.prereqfor)
+  const prereqSet = new Set(addedCourse.prereqfor);
   for (let i = 0; i < courses.length; ++i) {
     // if (prereqSet.has())
     const preReqTree = await refreshPreReq(courses[i]);
@@ -31,25 +30,24 @@ const findPreReqs = async (addedCourse, courses) => {
 // for performance, we will only check prereqs of this newly added object, and prereqs of any that this added/removed course would influence via PrerequisiteFor attribute.
 // if none are on there, just have the added course's prereq be checked.
 const refreshPreReq = async (id) => {
-    if (id.includes("I&CSCI")) {
-      id = id.replace("I&CSCI", "I%26CSCI");
-    } else if (id.includes("CRM/LAW")) {
-      id = id.replace("CRM/LAW", "CRM%2FLAW");
+  if (id.includes("I&CSCI")) {
+    id = id.replace("I&CSCI", "I%26CSCI");
+  } else if (id.includes("CRM/LAW")) {
+    id = id.replace("CRM/LAW", "CRM%2FLAW");
+  }
+  const additionalData = await fetch(
+    `https://api-next.peterportal.org/v1/rest/courses/${id}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "GET",
     }
-    const additionalData = await fetch(
-      `https://api-next.peterportal.org/v1/rest/courses/${id}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "GET",
-      }
-    );
-    let additionalDataResults = await additionalData.json();
-    const prereqTree = additionalDataResults.payload.prerequisiteTree;
-    return prereqTree;
-
-}
+  );
+  let additionalDataResults = await additionalData.json();
+  const prereqTree = additionalDataResults.payload.prerequisiteTree;
+  return prereqTree;
+};
 // my attempt at traversing the tree, its an object with an array of objects
 function checkPreReqs(tree, courseSet, type) {
   console.log(type);
@@ -60,23 +58,18 @@ function checkPreReqs(tree, courseSet, type) {
       console.log(`element #${i}:`, type);
       if ("AND" in tree[i]) {
         const boolVal = checkPreReqs(tree[i], courseSet, "AND");
-        if (type === "AND" && boolVal === false)
-          return false;
+        if (type === "AND" && boolVal === false) return false;
         else if (type === "AND" && boolVal === true) {
           continue; // keep iterating
-        }
-        else if (type === "OR" && boolVal === false) {
+        } else if (type === "OR" && boolVal === false) {
           continue; // we need to see if something true is found
-        }
-        else if (type === "OR" && boolVal === true) {
+        } else if (type === "OR" && boolVal === true) {
           orCheck = true; // if AND was evaluated to be true
           return true;
-        }
-        else if (type === "base" && boolVal === true) {
+        } else if (type === "base" && boolVal === true) {
           console.log("base passed AND check");
           return true;
-        }
-        else {
+        } else {
           // if type was AND and boolVal is true
           continue;
         }
@@ -85,20 +78,15 @@ function checkPreReqs(tree, courseSet, type) {
         if (type === "OR" && boolVal === true) {
           orCheck = true;
           return true;
-        }
-        else if (type === "OR" && boolVal === false) {
+        } else if (type === "OR" && boolVal === false) {
           continue; // keep checking through the elements
-        }
-        else if (type === "AND" && boolVal === true) {
+        } else if (type === "AND" && boolVal === true) {
           continue;
-        }
-        else if (type === "AND" && boolVal === false) {
+        } else if (type === "AND" && boolVal === false) {
           return false;
-        }
-        else if (type === "base" && boolVal === false) {
+        } else if (type === "base" && boolVal === false) {
           continue;
-        }
-        else if (type === "base" && boolVal === true) {
+        } else if (type === "base" && boolVal === true) {
           console.log("base passed OR check");
           return true;
         }
@@ -116,10 +104,9 @@ function checkPreReqs(tree, courseSet, type) {
             console.log(
               "keep checking and see if orCheck is still false by the end. if it is, do a check out of this loop and return false"
             );
-          }
-          else if (courseSet.has(query) && type == "OR"){
-              console.log("passes OR check");
-              return true;
+          } else if (courseSet.has(query) && type == "OR") {
+            console.log("passes OR check");
+            return true;
           }
         } else if ("examName" in tree[i]) {
           const query = tree[i].examName + ` (Min. Score: ${tree[i].minGrade})`;
@@ -163,6 +150,24 @@ function checkPreReqs(tree, courseSet, type) {
   }
 }
 
+function chooseLogo() {
+  const logoPaths = [
+    "../images/zotngozaza.png",
+    "../images/zotngozaza.png",
+    "../images/zotngozaza.png",
+    "../images/zotngozaza.png",
+    "../images/zotngozaza.png",
+    "../images/dabbingeater.gif",
+    "../images/graduatingeater.png",
+    "../images/zot.gif",
+    "../images/zyzzfixed.png",
+    "../images/mariojudah.gif",
+  ];
+  const num = parseInt((Math.random() * 10) % logoPaths.length);
+  console.log(num);
+  return logoPaths[num];
+}
+
 function HomePage() {
   const { state } = useLocation();
   console.log(state);
@@ -170,9 +175,16 @@ function HomePage() {
   const [reload, setReload] = useState(false);
   const navigation = useNavigation();
   const data = useLoaderData();
+  
   if (state != null) {
-    const stateObj = {id: state.id, prerequisitetree: state.prereqTree, prereqfor: state.prerequisitefor}
-    const courseIds = data.map((element)=>{return element.id}) // i don't think we need courseIds prerequisiteFors, only if you want it to be recursive
+    const stateObj = {
+      id: state.id,
+      prerequisitetree: state.prereqTree,
+      prereqfor: state.prerequisitefor,
+    };
+    const courseIds = data.map((element) => {
+      return element.id;
+    }); // i don't think we need courseIds prerequisiteFors, only if you want it to be recursive
     findPreReqs(stateObj, courseIds);
   }
   const test =
@@ -188,7 +200,7 @@ function HomePage() {
         )
       : "no prereqtree";
   console.log(test);
-
+  const logo = chooseLogo();
   return (
     <>
       {state != null && (
@@ -208,7 +220,19 @@ function HomePage() {
         </Alert>
       )}
       <div className={classes.header}>
-        <img src={ZotnZaza} alt="Zot N Zaza" style={{ height: "7rem" }} />
+        <img
+          src={logo}
+          alt="Zot N Zaza"
+          style={{
+            height: "8rem",
+            width: "8rem",
+            marginRight: "2rem",
+            textAlign: "center",
+            position: "relative",
+            left: logo === "../images/zotngozaza.png" ? 10 : 0,
+            bottom: logo === "../images/zotngozaza.png" ? 7 : 0,
+          }}
+        />
         <h1>Zot N' Schedule</h1>
       </div>
       {navigation.state === "loading" ? (

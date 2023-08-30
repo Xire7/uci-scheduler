@@ -32,6 +32,7 @@ This was a nice project to work on to solidify CRUD topics, backend work with Po
 - [X] also found out a way to add a space between DEPT and ID 
 - [X] fixed how inaccurate the database data fetch is, prioritize keywords first in ID if they are retrieved from vectorDB, but that includes adding space between DEPT and ID
 - [X] add plus buttons to every card which automatically procs the drawer and has those filled out except for course name
+- [ ] add a color picker for the class tags
 - [ ] title should also be customizable by the user for each list, and each list should ask for a year timeframe
 - [ ] add a description to the drawer when there are no search elements loaded
 - [ ] add description to the bottom when there are no courses initially chosen

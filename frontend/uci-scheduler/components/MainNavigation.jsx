@@ -13,7 +13,7 @@ import { Avatar, AvatarBadge, AvatarGroup, WrapItem } from "@chakra-ui/react";
 
 const AccountIcon = (
   <WrapItem>
-    <Avatar name="user" src="https://media.licdn.com/dms/image/C4E03AQFBYBdUfZNqFA/profile-displayphoto-shrink_800_800/0/1522973966658?e=2147483647&v=beta&t=yVBk-psxVrL0_EX69Qo1WnrXIyck85kG_3ySAp65oL4" size='xs'/>
+    <Avatar name="admin" src="../images/nerdpeter.jpg" size='xs'/>
   </WrapItem>
 );
 
