@@ -15,8 +15,6 @@ import { PlusSquareIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 
 const onAddHandler = async (data, timeObj, navigate) => {
-  // console.log(data, timeObj, "from addHandler");
-  // console.log(data.metadata);
   let dataObj = {
     department: data.metadata.department,
     description: data.metadata.description,
@@ -27,14 +25,6 @@ const onAddHandler = async (data, timeObj, navigate) => {
     quarter: timeObj.quarter,
   };
   try {
-
-    // however we can't add a prereq tree to the database since thats too complex
-    // we could still store what prereqs are missing / the prereq that broke the validity
-    // or we could also translate the tree into AND OR english, then show what prereq first broke it as stated above
-    // in addition to prereq tree, add course units, courseLevel (low/upper div), prereqFor, preReqText
-    // check preReqsFor after you delete an element
-
-    // we want to add the more indepth details such as courseLevel, prerequisite tree and prerequisite list, and maxUnits
     let id = dataObj.id;
     if (id.includes("I&CSCI")) {
       id = id.replace("I&CSCI", "I%26CSCI");
@@ -51,18 +41,18 @@ const onAddHandler = async (data, timeObj, navigate) => {
       }
     );
     let additionalDataResults = await additionalData.json();
-    // console.log(additionalDataResults);
-    // console.log(additionalDataResults.payload);
+    console.log("Should find PreReq in this json.." , additionalDataResults);
     const prereqTree = additionalDataResults.payload.prerequisiteTree;
     additionalDataResults = {
       prerequisiteText: additionalDataResults.payload.prerequisiteText,
       prerequisiteFor: additionalDataResults.payload.prerequisiteFor,
       courseLevel: additionalDataResults.payload.courseLevel,
       maxUnits: additionalDataResults.payload.maxUnits,
+      prereqFulfilled: true,
     };
     dataObj = { ...dataObj, ...additionalDataResults };
-    // console.log("In SearchList.jsx", dataObj);
-    // check here after
+
+    console.log("PREREQ???", prereqTree)
     const result = await fetch("http://localhost:3005/api/v1/courses/add", {
       headers: {
         "Content-Type": "application/json",

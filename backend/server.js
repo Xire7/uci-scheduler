@@ -27,14 +27,13 @@ app.get("/api/v1/courses", async (request, response) => {
     response.status(200).json({
       status: "success",
       results: result.rows.length,
-      data : {
+      data: {
         courses: result.rows,
-      }
+      },
     });
   } catch (error) {
     console.log("Error:", error);
-  };
-
+  }
 });
 
 app.post("/api/v1/courses", async (request, response) => {
@@ -45,13 +44,13 @@ app.post("/api/v1/courses", async (request, response) => {
     response.status(200).json({
       status: "success",
       results: result.rows.length,
-      data : {
+      data: {
         courses: result.rows,
-      }
+      },
     });
   } catch (error) {
     console.log("Error:", error);
-  };
+  }
 });
 
 app.post("/api/v1/search", async (request, response) => {
@@ -61,13 +60,13 @@ app.post("/api/v1/search", async (request, response) => {
     const result = await queryDB(courseInput);
     response.status(200).json({
       status: "success",
-      data : {
+      data: {
         courses: result,
-      }
+      },
     });
   } catch (error) {
     console.log("Error:", error);
-  };
+  }
 });
 
 app.get("/api/v1/courses/:id", async (request, response) => {
@@ -112,10 +111,10 @@ app.patch("/api/v1/courses/:id", async (request, response) => {
 
 app.post("/api/v1/courses/add", async (request, response) => {
   const reqdata = request.body;
-  console.log(reqdata);
+  // console.log(reqdata);
   try {
     const result = await db.query(
-      "INSERT INTO courses (title, department, description, id, username, year, quarter, prerequisiteFor, prerequisiteText, courseLevel, maxUnits) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) returning *",
+      "INSERT INTO courses (title, department, description, id, username, year, quarter, prerequisiteFor, prerequisiteText, courseLevel, maxUnits, prereqFulfilled) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) returning *",
       [
         reqdata.title,
         reqdata.department,
@@ -128,6 +127,7 @@ app.post("/api/v1/courses/add", async (request, response) => {
         reqdata.prerequisiteText,
         reqdata.courseLevel,
         reqdata.maxUnits,
+        reqdata.prereqFulfilled,
       ]
     );
     response.status(201).json({
@@ -147,9 +147,10 @@ app.post("/api/v1/courses/add", async (request, response) => {
 app.delete("/api/v1/courses/delete", async (request, response) => {
   console.log(request.body);
   try {
-    const result = await db.query("DELETE FROM courses where id = $1 AND username = $2", [
-      request.body.id, request.body.username
-    ]);
+    const result = await db.query(
+      "DELETE FROM courses where id = $1 AND username = $2",
+      [request.body.id, request.body.username]
+    );
     response.status(200).json({
       status: "success",
     });
@@ -159,6 +160,22 @@ app.delete("/api/v1/courses/delete", async (request, response) => {
     });
   }
 });
+
+app.post("/api/v1/courses/updated", async (request, response) => {
+  console.log(request.body);
+  console.log("UPDATING RN....")
+  try {
+    const result = await db.query(
+      "UPDATE courses SET prereqFulfilled = $1 WHERE id = $2 AND username = $3", [request.body.prereqFulfilled, request.body.id, request.body.username]
+    );
+    response.status(200).json({
+      status: "success",
+    });
+  } catch (err) {
+    console.log("Database Error:", err)
+    response.status(400).json({error: err});
+  }
+})
 
 const port = process.env.PORT || 6969;
 

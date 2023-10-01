@@ -49,6 +49,7 @@ const CourseList = ({ courses, onReload, year, open, setValues }) => {
                     maxUnits={element.maxunits}
                     prerequisiteFor={element.prerequisitefor}
                     prerequisiteText={element.prerequisitetext}
+                    prereqFulfilled={element.prereqfulfilled}
                   />
                 );
               })

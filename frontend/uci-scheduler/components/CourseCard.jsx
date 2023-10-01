@@ -20,6 +20,27 @@ import {
   PopoverAnchor,
 } from "@chakra-ui/react";
 import React from "react";
+import { WarningTwoIcon } from "@chakra-ui/icons";
+
+const refreshPreReq = async (id) => {
+  if (id.includes("I&CSCI")) {
+    id = id.replace("I&CSCI", "I%26CSCI");
+  } else if (id.includes("CRM/LAW")) {
+    id = id.replace("CRM/LAW", "CRM%2FLAW");
+  }
+  const additionalData = await fetch(
+    `https://api-next.peterportal.org/v1/rest/courses/${id}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "GET",
+    }
+  );
+  let additionalDataResults = await additionalData.json();
+  const prereqTree = additionalDataResults.payload.prerequisiteTree;
+  return prereqTree;
+};
 
 // will prolly not make random later..
 const colorPicker = () => {
@@ -49,7 +70,8 @@ const deleteHandler = async (
   year,
   title,
   quarter,
-  description
+  description,
+  prereqfor
 ) => {
   console.log(id, username);
   try {
@@ -69,6 +91,9 @@ const deleteHandler = async (
         username: "admin",
         quarter: quarter,
         year: year,
+        prereqTree: await refreshPreReq(id),
+        prerequisitefor: prereqfor,
+        prereqfulfilled: false,
       },
     }); // change username later!!! (its hardcoded rn)
   } catch (error) {
@@ -101,6 +126,7 @@ const CourseCard = ({
   prerequisiteFor,
   prerequisiteText,
   maxUnits,
+  prereqFulfilled,
 }) => {
   const navigate = useNavigate();
   const initRef = React.useRef();
@@ -115,10 +141,21 @@ const CourseCard = ({
               justifyContent={"space-between"}
               h={10}
               maxWidth={"auto"}
-              colorScheme={"orange"}
+              colorScheme={prereqFulfilled ? "green" : "orange"}
               marginBottom={4}
             >
-              {deptConvertor(id)}
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                {deptConvertor(id)}
+                {prereqFulfilled ? "" : <WarningTwoIcon />}
+              </div>
               <TagCloseButton
                 onClick={async () => {
                   await deleteHandler(
@@ -129,7 +166,8 @@ const CourseCard = ({
                     year,
                     title,
                     quarter,
-                    description
+                    description,
+                    prerequisiteFor
                   );
                 }}
               />
@@ -142,27 +180,51 @@ const CourseCard = ({
               {id}{" "}
               <p style={{ fontSize: "0.8rem", display: "inline" }}>
                 ({maxUnits} units)
-              </p>
+              </p>{" "}
             </PopoverHeader>
             <PopoverBody>{description}</PopoverBody>
-            {prerequisiteText != "" || prerequisiteFor.length != 0 ? (
-              <PopoverFooter fontSize="0.8rem">
+            <PopoverFooter fontSize="0.8rem">
+              {prerequisiteText != "" ? (
                 <div>
-                  <p style={{ fontSize: "1rem", fontWeight: "bold" }}>
-                    Prerequisites:{" "}
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      fontWeight: "bold",
+                      marginBottom: "2px",
+                    }}
+                  >
+                    {prereqFulfilled === true ? (
+                      `Prerequisites: `
+                    ) : (
+                      <>
+                        <WarningTwoIcon mr={1} />
+                        Missing Prerequisite(s):
+                      </>
+                    )}
                   </p>
                   {prerequisiteText}
                 </div>
+              ) : (
+                ""
+              )}
+              {prerequisiteFor.length != 0 ? (
                 <div>
-                  <p style={{ fontSize: "1rem", fontWeight: "bold" }}>
+                  <p
+                    style={{
+                      fontSize: "1rem",
+                      fontWeight: "bold",
+                      marginBottom: "2px",
+                      marginTop: "2px",
+                    }}
+                  >
                     This is a Prerequisite For:{" "}
                   </p>
                   {prerequisiteFor.join(", ")}
                 </div>
-              </PopoverFooter>
-            ) : (
-              ""
-            )}
+              ) : (
+                ""
+              )}
+            </PopoverFooter>
             <Button
               m={"auto"}
               colorScheme="blackAlpha"

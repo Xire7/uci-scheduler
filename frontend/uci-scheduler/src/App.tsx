@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RootLayout from "../components/RootLayout";
-import CourseSearchPage from "../routes/CourseSearch";
-import CourseDetails from "../routes/CourseDetails";
-import HomePage, {loadCourses} from "../routes/HomePage";
+import Account from "../routes/Account.jsx";
+import HomePage, { loadCourses } from "../routes/HomePage";
 import "./App.css";
 
 function App() {
@@ -13,19 +12,10 @@ function App() {
       element: <RootLayout />,
       children: [
         {
-          index: true,
+          path: "",
           element: <HomePage />,
-          loader: loadCourses
-        },
-        {
-          path: "courseSearch",
-          element: <CourseSearchPage />,
-          children: [
-            {
-              path: ":/courseName",
-              element: <CourseDetails />,
-            },
-          ],
+          loader: loadCourses,
+          children: [{ path: "account", element: <Account /> }],
         },
       ],
     },
