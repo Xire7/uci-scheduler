@@ -26,7 +26,7 @@ This was a nice project to work on to solidify CRUD topics, backend work with Po
 
 
 ## To-do List (MANY bugs/QoL to fix too!) 🌪️
-- # [ ] Add a prerequisite tree check!
+- # [X] Add a prerequisite tree check!
 - # [ ] Scale the website to allow other users to access databases and be able to schedule simultaneously without unauthorized interferences 
 - [X] figured out how to rerender when adding classes and removing classes without using a hard refresh through useNavigate
 - [X] also found out a way to add a space between DEPT and ID 
